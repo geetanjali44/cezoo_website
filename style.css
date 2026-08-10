@@ -1,0 +1,2966 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+html{
+    scroll-behavior:smooth;
+
+    -webkit-text-size-adjust:100%;
+    text-size-adjust:100%;
+}
+
+
+body{
+    width:100%;
+    min-height:100vh;
+
+    padding:24px;
+
+    background:#ffffff;
+
+    color:#111;
+
+    font-family:bungee;
+
+    overflow-x:hidden;
+}
+
+
+
+/* =====================================================
+   WAVE BACKGROUND
+===================================================== */
+
+.dashboardWaveBg{
+    position:fixed;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+
+    pointer-events:none;
+
+    z-index:-1;
+
+    background:#fff;
+}
+
+
+.dashboardWaveBg svg{
+    position:absolute;
+
+    top:-12%;
+    left:-12%;
+
+    width:124%;
+    height:124%;
+
+    animation:
+        waveContainerMove 12s ease-in-out infinite alternate;
+}
+
+
+.waveLines{
+    transform-origin:center;
+
+    animation:
+        waveGroupFloat 8s ease-in-out infinite alternate;
+}
+
+
+.waveLines path{
+    fill:none;
+
+    stroke:#8ae2f6;
+
+    stroke-width:1.2;
+
+    opacity:.7;
+
+    vector-effect:non-scaling-stroke;
+
+    animation:
+        flowWave 6s ease-in-out infinite alternate;
+}
+
+
+.waveLines path:nth-child(2){
+    animation-delay:-.4s;
+}
+
+.waveLines path:nth-child(3){
+    animation-delay:-.8s;
+}
+
+.waveLines path:nth-child(4){
+    animation-delay:-1.2s;
+}
+
+.waveLines path:nth-child(5){
+    animation-delay:-1.6s;
+}
+
+.waveLines path:nth-child(6){
+    animation-delay:-2s;
+}
+
+.waveLines path:nth-child(7){
+    animation-delay:-2.4s;
+}
+
+.waveLines path:nth-child(8){
+    animation-delay:-2.8s;
+}
+
+.waveLines path:nth-child(9){
+    animation-delay:-3.2s;
+}
+
+.waveLines path:nth-child(10){
+    animation-delay:-3.6s;
+}
+
+
+
+@keyframes flowWave{
+
+    0%{
+        transform:
+            translate3d(-45px,-30px,0)
+            rotate(-1.5deg);
+    }
+
+
+    100%{
+        transform:
+            translate3d(45px,30px,0)
+            rotate(1.5deg);
+    }
+
+}
+
+
+
+@keyframes waveGroupFloat{
+
+    from{
+        transform:
+            translate3d(-15px,-10px,0);
+    }
+
+
+    to{
+        transform:
+            translate3d(18px,12px,0);
+    }
+
+}
+
+
+
+@keyframes waveContainerMove{
+
+    from{
+        transform:
+            translate3d(-1.5%,-1%,0);
+    }
+
+
+    to{
+        transform:
+            translate3d(1.5%,1%,0);
+    }
+
+}
+
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.mainHeader{
+    width:100%;
+    max-width:1400px;
+
+    height:84px;
+
+    margin:0 auto;
+
+    padding:0 30px;
+
+    background:rgba(255,255,255,.93);
+
+    border:1px solid #e5e5e5;
+
+    border-radius:22px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    position:relative;
+
+    z-index:500;
+}
+
+
+
+/* LOGO */
+
+.companyLogo{
+    display:flex;
+
+    flex-direction:column;
+
+    text-decoration:none;
+
+    color:#038214;
+
+    line-height:1;
+}
+
+
+.logoMain{
+    font-size:24px;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+}
+
+
+.logoSmall{
+    margin-top:7px;
+
+    padding-left:15px;
+
+    font-size:10px;
+
+    font-weight:500;
+
+    letter-spacing:5.5px;
+
+    color:#025505;
+
+    text-transform:uppercase;
+}
+
+
+
+/* =====================================================
+   MENU BUTTON
+===================================================== */
+
+.menuBtn{
+    width:48px;
+    height:48px;
+
+    padding:8px;
+
+    border:0;
+
+    background:transparent;
+
+    cursor:pointer;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-end;
+    justify-content:center;
+
+    gap:6px;
+}
+
+
+.menuBtn span{
+    height:2px;
+
+    display:block;
+
+    background:#111;
+
+    border-radius:20px;
+
+    transition:.25s;
+}
+
+
+.menuBtn span:nth-child(1){
+    width:28px;
+}
+
+
+.menuBtn span:nth-child(2){
+    width:20px;
+}
+
+
+.menuBtn span:nth-child(3){
+    width:28px;
+}
+
+
+.menuBtn:hover span:nth-child(2){
+    width:28px;
+}
+
+
+
+/* =====================================================
+   SIDE MENU
+===================================================== */
+
+.menuOverlay{
+    position:fixed;
+
+    inset:0;
+
+    z-index:900;
+
+    background:rgba(0,0,0,.15);
+
+    backdrop-filter:blur(3px);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.3s;
+}
+
+
+.menuOverlay.active{
+    opacity:1;
+
+    visibility:visible;
+}
+
+
+.sideMenu{
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:420px;
+    max-width:90vw;
+
+    height:100dvh;
+
+    padding:30px;
+
+    z-index:1000;
+
+    background:#fff;
+
+    border-right:1px solid #e5e5e5;
+
+    transform:translateX(-105%);
+
+    transition:
+        transform .5s cubic-bezier(.76,0,.24,1);
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+
+.sideMenu.active{
+    transform:translateX(0);
+}
+
+
+.sideMenuTop{
+    display:flex;
+
+    justify-content:space-between;
+
+    padding-bottom:30px;
+
+    border-bottom:1px solid #ededed;
+}
+
+
+.sideLogo{
+    display:flex;
+
+    flex-direction:column;
+}
+
+
+.sideLogoMain{
+    font-size:22px;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+
+    color:#038214;
+}
+
+
+.sideLogoSmall{
+    margin-top:6px;
+
+    font-size:9px;
+
+    letter-spacing:5px;
+
+    color:#025505;
+}
+
+
+.closeMenuBtn{
+    width:42px;
+    height:42px;
+
+    border:1px solid #e5e5e5;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    cursor:pointer;
+}
+
+
+.sideMenuLinks{
+    margin-top:35px;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+
+.sideMenuLinks a{
+    min-height:70px;
+
+    border-bottom:1px solid #ededed;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:25px;
+
+    text-decoration:none;
+
+    color:#111;
+
+    font-size:24px;
+}
+
+
+.menuNumber{
+    width:25px;
+
+    font-size:10px;
+
+    color:#aaa;
+}
+
+
+.sideMenuBottom{
+    margin-top:auto;
+
+    padding-top:25px;
+}
+
+
+.sideMenuBottom span{
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    color:#999;
+}
+
+
+.sideMenuBottom p{
+    margin-top:10px;
+
+    font-size:13px;
+
+    color:#666;
+}
+
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.heroSection{
+    width:100%;
+    max-width:1400px;
+
+    min-height:680px;
+
+    margin:0 auto;
+
+    padding:90px 40px;
+
+    display:flex;
+
+    align-items:center;
+}
+
+
+.heroContent{
+    max-width:850px;
+}
+
+
+.heroContent h1{
+    font-size:72px;
+
+    line-height:1;
+
+    letter-spacing:-4px;
+
+    font-weight:700;
+}
+
+
+.heroContent h1 span{
+    display:block;
+
+    color:#999;
+}
+
+
+.heroContent p{
+    max-width:580px;
+
+    margin-top:35px;
+
+    font-size:17px;
+
+    line-height:1.8;
+
+    color:#666;
+}
+
+
+.heroButtons{
+    display:flex;
+
+    gap:12px;
+
+    margin-top:38px;
+}
+
+
+.primaryBtn,
+.secondaryBtn{
+    min-height:52px;
+
+    padding:0 22px;
+
+    border-radius:14px;
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:12px;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    font-weight:600;
+}
+
+
+.primaryBtn{
+    background:#111;
+
+    color:#fff;
+}
+
+
+.secondaryBtn{
+    background:#fff;
+
+    color:#111;
+
+    border:1px solid #ddd;
+}
+
+
+
+/* =====================================================
+   WHAT WE DO
+===================================================== */
+
+.statementSection{
+    width:100%;
+    max-width:1400px;
+
+    margin:0 auto;
+
+    padding:110px 40px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    text-align:center;
+}
+
+
+.whatWeDoTitle,
+.ourServicesTitle{
+    width:100%;
+
+    font-size:19px;
+
+    font-weight:600;
+
+    letter-spacing:4px;
+
+    color:#999;
+
+    text-align:center;
+}
+
+
+.whatWeDoTitle{
+    margin-bottom:24px;
+}
+
+
+.statementContent{
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    gap:20px;
+}
+
+
+.statementBrand,
+.statementText{
+    font-size:38px;
+
+    letter-spacing:-1.5px;
+}
+
+
+.statementBrand{
+    font-weight:700;
+}
+
+
+.statementEqual{
+    font-size:32px;
+
+    color:#aaa;
+}
+
+
+.statementText{
+    color:#777;
+}
+
+
+.statementDescription{
+    width:100%;
+    max-width:900px;
+
+    margin:40px auto 0;
+
+    font-size:17px;
+
+    font-weight:500;
+
+    line-height:1.8;
+
+    color:#666;
+
+    text-align:center;
+}
+
+
+
+/* =====================================================
+   ABOUT
+===================================================== */
+
+.aboutSection{
+    width:100%;
+    max-width:1400px;
+
+    margin:0 auto;
+
+    padding:100px 40px;
+}
+
+
+.aboutContent{
+    max-width:900px;
+}
+
+
+.sectionLabel,
+.projectContent > span,
+.contactSection > span{
+    font-size:19px;
+
+    font-weight:600;
+
+    letter-spacing:4px;
+
+    color:#999;
+
+    text-transform:uppercase;
+}
+
+
+.aboutContent h2{
+    margin-top:20px;
+
+    font-size:56px;
+
+    line-height:1.1;
+
+    letter-spacing:-3px;
+}
+
+
+.aboutContent p{
+    max-width:650px;
+
+    margin-top:25px;
+
+    font-size:17px;
+
+    line-height:1.8;
+
+    color:#777;
+}
+
+
+
+/* =====================================================
+   SERVICES
+===================================================== */
+
+.servicesSection{
+    width:100%;
+    max-width:1400px;
+
+    margin:0 auto;
+
+    padding:100px 40px;
+}
+
+
+.ourServicesTitle{
+    margin-bottom:35px;
+}
+
+
+.servicesGrid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+    gap:22px;
+}
+
+
+.serviceCard{
+    min-height:220px;
+
+    padding:24px;
+
+    border:1px solid #e2e2e2;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.92);
+
+    display:flex;
+
+    flex-direction:column;
+
+    cursor:pointer;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+
+.serviceCard:hover{
+    transform:translateY(-6px);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.06);
+}
+
+
+.serviceTop{
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+}
+
+
+.serviceIcon{
+    width:48px;
+    height:48px;
+
+    border:1px solid #e4e4e4;
+
+    border-radius:14px;
+
+    background:#f8f8f8;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:18px;
+}
+
+
+.serviceArrow{
+    font-size:13px;
+
+    color:#999;
+}
+
+
+.serviceCard h3{
+    margin-top:24px;
+
+    font-size:21px;
+
+    font-weight:600;
+}
+
+
+.serviceCard p{
+    margin-top:10px;
+
+    font-size:14px;
+
+    line-height:1.6;
+
+    color:#777;
+}
+
+
+
+/* =====================================================
+   PROJECTS
+===================================================== */
+
+.projectsSection{
+    width:100%;
+    max-width:1400px;
+
+    margin:0 auto;
+
+    padding:100px 40px;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:80px;
+
+    align-items:center;
+}
+
+
+.projectContent h2{
+    margin-top:20px;
+
+    font-size:52px;
+
+    line-height:1.08;
+
+    letter-spacing:-2.5px;
+}
+
+
+.projectContent p{
+    max-width:550px;
+
+    margin-top:24px;
+
+    font-size:16px;
+
+    line-height:1.8;
+
+    color:#777;
+}
+
+
+.projectCard{
+    min-height:260px;
+
+    padding:32px;
+
+    border:1px solid #dedede;
+
+    border-radius:22px;
+
+    background:rgba(255,255,255,.9);
+
+    display:flex;
+
+    align-items:flex-end;
+    justify-content:space-between;
+}
+
+
+.projectLabel{
+    font-size:10px;
+
+    letter-spacing:2px;
+
+    color:#999;
+}
+
+
+.projectCard h3{
+    margin-top:15px;
+
+    font-size:50px;
+}
+
+
+.projectCard p{
+    margin-top:10px;
+
+    color:#777;
+}
+
+
+.projectArrow{
+    width:52px;
+    height:52px;
+
+    border:1px solid #ddd;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+}
+
+
+
+/* =====================================================
+   CONTACT
+===================================================== */
+
+.contactSection{
+    width:100%;
+    max-width:1400px;
+
+    margin:0 auto;
+
+    padding:130px 40px;
+
+    text-align:center;
+}
+
+
+.contactSection h2{
+    margin-top:20px;
+
+    font-size:64px;
+
+    letter-spacing:-3px;
+}
+
+
+.contactSection p{
+    margin-top:20px;
+
+    color:#777;
+}
+
+
+.contactSection a{
+    margin-top:35px;
+
+    min-height:48px;
+
+    padding:0 22px;
+
+    border-radius:14px;
+
+    background:#111;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer{
+    width:100%;
+    max-width:1400px;
+
+    margin:0 auto;
+
+    padding:35px 40px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+
+.footerLogo{
+    display:flex;
+
+    flex-direction:column;
+}
+
+
+.footerLogo strong{
+    letter-spacing:2px;
+}
+
+
+.footerLogo span{
+    margin-top:4px;
+
+    font-size:8px;
+
+    letter-spacing:4px;
+
+    color:#888;
+}
+
+
+footer p{
+    font-size:12px;
+
+    color:#999;
+}
+
+
+
+/* =====================================================
+   REVEAL
+===================================================== */
+
+.reveal{
+    opacity:0;
+
+    transform:translateY(35px);
+
+    transition:
+        opacity .7s ease,
+        transform .7s ease;
+}
+
+
+.reveal.show{
+    opacity:1;
+
+    transform:translateY(0);
+}
+
+
+
+/* =====================================================
+   FULL SERVICE PAGE
+===================================================== */
+
+.servicePage{
+    display:none;
+
+    width:100%;
+
+    min-height:100vh;
+
+    animation:
+        servicePageIn .45s cubic-bezier(.22,1,.36,1);
+}
+
+
+.servicePage.active{
+    display:block;
+}
+
+
+@keyframes servicePageIn{
+
+    from{
+        opacity:0;
+
+        transform:
+            translateX(40px);
+    }
+
+
+    to{
+        opacity:1;
+
+        transform:
+            translateX(0);
+    }
+
+}
+
+
+
+/* SERVICE HEADER - SAME AS MAIN HEADER */
+
+.servicePageHeader{
+    width:100%;
+    max-width:1400px;
+    height:84px;
+    margin:0 auto;
+    padding:0 30px;
+    background:rgba(255,255,255,.93);
+    border:1px solid #e5e5e5;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:relative;
+    z-index:500;
+}
+
+.servicePageLogo{
+    display:flex;
+    flex-direction:column;
+    color:#038214;
+    line-height:1;
+    text-align:left;
+}
+
+.servicePageLogo .logoMain{
+    font-size:24px;
+    font-weight:800;
+    letter-spacing:2px;
+}
+
+.servicePageLogo .logoSmall{
+    margin-top:7px;
+    padding-left:15px;
+    font-size:10px;
+    font-weight:500;
+    letter-spacing:5.5px;
+    color:#025505;
+    text-transform:uppercase;
+}
+
+.serviceHomeBtn{
+    padding:10px 4px;
+    border:0;
+    background:transparent;
+    color:#111;
+    font-family:"Inter",sans-serif;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:2px;
+    cursor:pointer;
+    transition:color .25s ease;
+}
+
+.serviceHomeBtn:hover{
+    color:#038214;
+}
+
+
+/* SERVICE DETAILS HERO */
+
+.serviceDetailsHero{
+    width:100%;
+    max-width:1200px;
+
+    min-height:500px;
+
+    margin:0 auto;
+
+    padding:85px 30px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+}
+
+
+.mainServiceIcon{
+    width:64px;
+    height:64px;
+
+    margin-bottom:28px;
+
+    border:1px solid #ddd;
+
+    border-radius:18px;
+
+    background:#fff;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:23px;
+}
+
+
+.servicePageLabel,
+.serviceSectionTitle,
+.serviceContactSection > span{
+    font-size:10px;
+
+    font-weight:600;
+
+    letter-spacing:3px;
+
+    color:#999;
+}
+
+
+.serviceDetailsHero h1{
+    margin-top:18px;
+
+    font-size:60px;
+
+    line-height:1.05;
+
+    letter-spacing:-3px;
+}
+
+
+.serviceDetailsHero p{
+    max-width:650px;
+
+    margin-top:22px;
+
+    font-size:16px;
+
+    line-height:1.8;
+
+    color:#777;
+}
+
+
+
+/* TECHNOLOGIES */
+
+.serviceTechnologySection,
+.whatBuildSection{
+    width:100%;
+    max-width:1100px;
+
+    margin:0 auto;
+
+    padding:70px 30px;
+}
+
+
+.serviceSectionTitle{
+    text-align:center;
+}
+
+
+.technologyGrid{
+    margin-top:35px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+    gap:14px;
+}
+
+
+.techCard{
+    min-height:100px;
+
+    padding:20px;
+
+    border:1px solid #e3e3e3;
+
+    border-radius:17px;
+
+    background:rgba(255,255,255,.94);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+}
+
+
+.techCard i{
+    width:35px;
+
+    font-size:22px;
+
+    text-align:center;
+
+    color:#555;
+}
+
+
+.techCard span{
+    font-size:14px;
+
+    font-weight:600;
+}
+
+
+
+/* WHAT WE BUILD */
+
+.buildGrid{
+    margin-top:35px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:14px;
+}
+
+
+.buildCard{
+    min-height:90px;
+
+    padding:20px;
+
+    border:1px solid #e4e4e4;
+
+    border-radius:17px;
+
+    background:#fff;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+
+.buildIcon{
+    width:40px;
+    height:40px;
+
+    border-radius:12px;
+
+    background:#f6f6f6;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    color:#777;
+}
+
+
+.buildCard p{
+    font-size:14px;
+
+    font-weight:500;
+}
+
+
+
+/* SERVICE CONTACT */
+
+.serviceContactSection{
+    width:100%;
+    max-width:1000px;
+
+    margin:0 auto;
+
+    padding:110px 30px;
+
+    text-align:center;
+}
+
+
+.serviceContactSection h2{
+    max-width:700px;
+
+    margin:20px auto 0;
+
+    font-size:44px;
+
+    line-height:1.1;
+
+    letter-spacing:-2px;
+}
+
+
+.serviceContactBtn{
+    min-height:48px;
+
+    margin-top:30px;
+
+    padding:0 20px;
+
+    border:0;
+
+    border-radius:13px;
+
+    background:#111;
+
+    color:#fff;
+
+    cursor:pointer;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-weight:600;
+}
+
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media(max-width:1000px){
+
+    .heroContent h1{
+        font-size:58px;
+    }
+
+
+    .statementBrand,
+    .statementText{
+        font-size:31px;
+    }
+
+
+    .servicesGrid{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+}
+
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:800px){
+
+    body{
+        padding:12px;
+    }
+
+
+    .mainHeader{
+        height:68px;
+
+        padding:0 16px;
+
+        border-radius:17px;
+    }
+
+
+    .logoMain{
+        font-size:19px;
+    }
+
+
+    .logoSmall{
+        font-size:8px;
+
+        letter-spacing:4px;
+    }
+
+
+    .sideMenu{
+        width:300px;
+
+        max-width:86vw;
+
+        padding:20px;
+    }
+
+
+    .sideMenuLinks a{
+        min-height:58px;
+
+        font-size:19px;
+    }
+
+
+
+    /* HERO */
+
+    .heroSection{
+        min-height:auto;
+
+        padding:70px 8px 85px;
+    }
+
+
+    .heroContent h1{
+        font-size:34px;
+
+        line-height:1.12;
+
+        letter-spacing:-1.5px;
+    }
+
+
+    .heroContent p{
+        font-size:14px;
+    }
+
+
+    .heroButtons{
+        flex-direction:column;
+    }
+
+
+    .primaryBtn,
+    .secondaryBtn{
+        width:100%;
+    }
+
+
+
+    /* STATEMENT */
+
+    .statementSection{
+        padding:85px 8px;
+    }
+
+
+    .whatWeDoTitle,
+    .ourServicesTitle,
+    .sectionLabel,
+    .projectContent > span,
+    .contactSection > span{
+        font-size:9px;
+
+        letter-spacing:3px;
+    }
+
+
+    .statementContent{
+        gap:9px;
+    }
+
+
+    .statementBrand,
+    .statementText{
+        font-size:19px;
+
+        line-height:1.45;
+
+        letter-spacing:-.5px;
+    }
+
+
+    .statementEqual{
+        font-size:17px;
+    }
+
+
+    .statementDescription{
+        margin-top:28px;
+
+        font-size:14px;
+    }
+
+
+
+    /* ABOUT */
+
+    .aboutSection{
+        padding:85px 8px;
+    }
+
+
+    .aboutContent h2{
+        font-size:29px;
+
+        line-height:1.2;
+
+        letter-spacing:-1.2px;
+    }
+
+
+    .aboutContent p{
+        font-size:14px;
+    }
+
+
+
+    /* SERVICES */
+
+    .servicesSection{
+        padding:85px 8px;
+    }
+
+
+    .servicesGrid{
+        grid-template-columns:1fr;
+
+        gap:16px;
+    }
+
+
+    .serviceCard{
+        min-height:180px;
+
+        padding:20px;
+
+        border-radius:16px;
+    }
+
+
+    .serviceIcon{
+        width:40px;
+        height:40px;
+
+        border-radius:11px;
+
+        font-size:15px;
+    }
+
+
+    .serviceCard h3{
+        margin-top:18px;
+
+        font-size:18px;
+    }
+
+
+    .serviceCard p{
+        margin-top:8px;
+
+        font-size:13px;
+    }
+
+
+
+    /* PROJECT */
+
+    .projectsSection{
+        display:block;
+
+        padding:85px 8px;
+    }
+
+
+    .projectContent h2{
+        font-size:29px;
+
+        line-height:1.2;
+
+        letter-spacing:-1.2px;
+    }
+
+
+    .projectCard{
+        min-height:200px;
+
+        margin-top:40px;
+
+        padding:24px;
+    }
+
+
+    .projectCard h3{
+        font-size:32px;
+    }
+
+
+
+    /* CONTACT */
+
+    .contactSection{
+        padding:90px 8px;
+    }
+
+
+    .contactSection h2{
+        font-size:30px;
+
+        line-height:1.2;
+
+        letter-spacing:-1.2px;
+    }
+
+
+
+    /* FOOTER */
+
+    footer{
+        padding:30px 8px;
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
+    }
+
+
+
+    /* SERVICE PAGE */
+
+    .servicePageHeader{
+        height:68px;
+        padding:0 16px;
+        border-radius:17px;
+    }
+
+    .servicePageLogo .logoMain{
+        font-size:19px;
+        letter-spacing:1.5px;
+    }
+
+    .servicePageLogo .logoSmall{
+        margin-top:5px;
+        padding-left:12px;
+        font-size:8px;
+        letter-spacing:4px;
+    }
+
+    .serviceHomeBtn{
+        font-size:10px;
+        letter-spacing:1.7px;
+    }
+
+
+    .serviceDetailsHero{
+        min-height:420px;
+
+        padding:70px 10px;
+    }
+
+
+    .mainServiceIcon{
+        width:52px;
+        height:52px;
+
+        border-radius:15px;
+
+        font-size:18px;
+    }
+
+
+    .serviceDetailsHero h1{
+        font-size:30px;
+
+        letter-spacing:-1.2px;
+    }
+
+
+    .serviceDetailsHero p{
+        font-size:14px;
+    }
+
+
+    .serviceTechnologySection,
+    .whatBuildSection{
+        padding:60px 5px;
+    }
+
+
+    .technologyGrid{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+        gap:10px;
+    }
+
+
+    .techCard{
+        min-height:82px;
+
+        padding:14px;
+
+        border-radius:14px;
+
+        gap:9px;
+    }
+
+
+    .techCard i{
+        width:28px;
+
+        font-size:18px;
+    }
+
+
+    .techCard span{
+        font-size:12px;
+    }
+
+
+    .buildGrid{
+        grid-template-columns:1fr;
+
+        gap:10px;
+    }
+
+
+    .buildCard{
+        min-height:74px;
+
+        padding:15px;
+
+        border-radius:14px;
+    }
+
+
+    .buildCard p{
+        font-size:13px;
+    }
+
+
+    .serviceContactSection{
+        padding:85px 10px;
+    }
+
+
+    .serviceContactSection h2{
+        font-size:28px;
+
+        letter-spacing:-1px;
+    }
+
+}
+
+
+/* =====================================================
+   ULTRA SMOOTH SIDE MENU
+   GPU-friendly: transform + opacity only
+===================================================== */
+
+/* Pause background wave while the menu is open.
+   This reduces GPU work on mobile / lower-end devices. */
+body.menu-open .dashboardWaveBg svg,
+body.menu-open .waveLines,
+body.menu-open .waveLines path{
+    animation-play-state:paused !important;
+}
+
+
+/* OVERLAY - no backdrop-filter because blur can stutter */
+.menuOverlay{
+    opacity:0;
+    visibility:hidden;
+
+    background:rgba(0,0,0,.12);
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+
+    transition:
+        opacity .22s linear,
+        visibility 0s linear .22s;
+
+    will-change:opacity;
+}
+
+.menuOverlay.active{
+    opacity:1;
+    visibility:visible;
+
+    transition:
+        opacity .22s linear,
+        visibility 0s;
+}
+
+
+/* MAIN PANEL - animate ONLY transform */
+.sideMenu{
+    transform:translate3d(-102%,0,0);
+
+    opacity:1 !important;
+
+    transition:
+        transform .32s cubic-bezier(.22,.61,.36,1);
+
+    will-change:transform;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+
+    contain:layout paint;
+}
+
+.sideMenu.active{
+    transform:translate3d(0,0,0);
+}
+
+
+/* TOP AREA */
+.sideMenuTop{
+    opacity:0;
+    transform:translate3d(-8px,0,0);
+
+    transition:
+        transform .20s ease-out .06s,
+        opacity .16s linear .06s;
+
+    will-change:transform,opacity;
+}
+
+.sideMenu.active .sideMenuTop{
+    opacity:1;
+    transform:translate3d(0,0,0);
+}
+
+
+/* Do not separately animate the logo.
+   Nested transforms are unnecessary GPU work. */
+.sideLogo{
+    opacity:1 !important;
+    transform:none !important;
+    transition:none !important;
+}
+
+
+/* CLOSE BUTTON */
+.closeMenuBtn{
+    opacity:1 !important;
+    transform:none !important;
+
+    transition:
+        background .18s ease,
+        color .18s ease;
+
+    will-change:auto;
+}
+
+.closeMenuBtn:hover{
+    background:#111;
+    color:#fff;
+    transform:none;
+}
+
+
+/* LINKS - very small stagger, transform + opacity only */
+.sideMenuLinks a{
+    opacity:0;
+    transform:translate3d(-10px,0,0);
+
+    transition:
+        transform .18s ease-out,
+        opacity .14s linear;
+
+    will-change:transform,opacity;
+}
+
+.sideMenu.active .sideMenuLinks a{
+    opacity:1;
+    transform:translate3d(0,0,0);
+}
+
+.sideMenu.active .sideMenuLinks a:nth-child(1){
+    transition-delay:.06s;
+}
+
+.sideMenu.active .sideMenuLinks a:nth-child(2){
+    transition-delay:.085s;
+}
+
+.sideMenu.active .sideMenuLinks a:nth-child(3){
+    transition-delay:.11s;
+}
+
+.sideMenu.active .sideMenuLinks a:nth-child(4){
+    transition-delay:.135s;
+}
+
+.sideMenu.active .sideMenuLinks a:nth-child(5){
+    transition-delay:.16s;
+}
+
+
+/* Avoid animating padding because it causes layout recalculation */
+.sideMenuLinks a:hover{
+    padding-left:0;
+}
+
+
+/* Small hover motion using transform only */
+.menuNumber{
+    transition:
+        transform .18s ease,
+        color .18s ease;
+}
+
+.sideMenuLinks a:hover .menuNumber{
+    color:#038214;
+    transform:translate3d(3px,0,0);
+}
+
+
+/* BOTTOM */
+.sideMenuBottom{
+    opacity:0;
+    transform:translate3d(0,8px,0);
+
+    transition:
+        transform .20s ease-out .14s,
+        opacity .16s linear .14s;
+
+    will-change:transform,opacity;
+}
+
+.sideMenu.active .sideMenuBottom{
+    opacity:1;
+    transform:translate3d(0,0,0);
+}
+
+
+/* MOBILE - even faster */
+@media(max-width:800px){
+
+    .sideMenu{
+        transition-duration:.26s;
+    }
+
+    .menuOverlay{
+        transition:
+            opacity .18s linear,
+            visibility 0s linear .18s;
+    }
+
+    .menuOverlay.active{
+        transition:
+            opacity .18s linear,
+            visibility 0s;
+    }
+
+    .sideMenuTop{
+        transition-delay:.035s;
+    }
+
+    .sideMenu.active .sideMenuLinks a:nth-child(1){
+        transition-delay:.035s;
+    }
+
+    .sideMenu.active .sideMenuLinks a:nth-child(2){
+        transition-delay:.055s;
+    }
+
+    .sideMenu.active .sideMenuLinks a:nth-child(3){
+        transition-delay:.075s;
+    }
+
+    .sideMenu.active .sideMenuLinks a:nth-child(4){
+        transition-delay:.095s;
+    }
+
+    .sideMenu.active .sideMenuLinks a:nth-child(5){
+        transition-delay:.115s;
+    }
+
+    .sideMenuBottom{
+        transition-delay:.10s;
+    }
+
+}
+
+
+/* Accessibility */
+@media(prefers-reduced-motion:reduce){
+
+    .sideMenu,
+    .menuOverlay,
+    .sideMenuTop,
+    .sideMenuLinks a,
+    .sideMenuBottom{
+        transition:none !important;
+    }
+
+}
+/* =====================================================
+   HOW WE BUILD - ROADMAP
+===================================================== */
+
+.roadmapSection{
+    width:100%;
+    max-width:1400px;
+
+    margin:0 auto;
+
+    padding:110px 40px;
+}
+
+
+.roadmapSmallTitle{
+    font-size:19px;
+    font-weight:600;
+
+    letter-spacing:4px;
+
+    color:#999;
+
+    text-align:center;
+}
+
+
+.roadmapMainTitle{
+    margin-top:20px;
+
+    font-size:52px;
+    font-weight:700;
+
+    line-height:1.08;
+
+    letter-spacing:-2.5px;
+
+    text-align:center;
+
+    color:#111;
+}
+
+
+.roadmapIntro{
+    max-width:580px;
+
+    margin:20px auto 0;
+
+    font-size:15px;
+    line-height:1.7;
+
+    text-align:center;
+
+    color:#777;
+}
+
+
+
+/* =========================
+   ROADMAP
+========================= */
+
+.roadmap{
+    position:relative;
+
+    max-width:1050px;
+
+    margin:80px auto 0;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:30px;
+}
+
+
+
+/* CENTER LINE */
+
+.roadmapLine{
+    position:absolute;
+
+    top:25px;
+    bottom:25px;
+
+    left:50%;
+
+    width:1px;
+
+    background:#dedede;
+
+    transform:translateX(-50%);
+}
+
+
+
+/* EACH STEP */
+
+.roadmapStep{
+    position:relative;
+
+    width:100%;
+
+    min-height:150px;
+
+    display:flex;
+
+    align-items:center;
+}
+
+
+
+/* ODD */
+
+.roadmapStep:nth-of-type(even){
+    justify-content:flex-start;
+}
+
+
+.roadmapStep:nth-of-type(even) .roadmapCard{
+    margin-right:55%;
+}
+
+
+/* EVEN */
+
+.roadmapStep:nth-of-type(odd){
+    justify-content:flex-end;
+}
+
+
+.roadmapStep:nth-of-type(odd) .roadmapCard{
+    margin-left:55%;
+}
+
+
+
+/* POINT */
+
+.roadmapPoint{
+    position:absolute;
+
+    left:50%;
+
+    width:50px;
+    height:50px;
+
+    border:1px solid #dedede;
+    border-radius:50%;
+
+    background:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    transform:translateX(-50%);
+
+    font-size:15px;
+
+    color:#111;
+
+    z-index:2;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.04);
+}
+
+
+.roadmapPointFinal{
+    background:#111;
+    color:#fff;
+
+    border-color:#111;
+}
+
+
+
+/* CARD */
+
+.roadmapCard{
+    width:45%;
+
+    padding:24px;
+
+    border:1px solid #e4e4e4;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.94);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+
+.roadmapCard:hover{
+    transform:translateY(-4px);
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.05);
+}
+
+
+.roadmapNumber{
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    color:#aaa;
+}
+
+
+.roadmapCard h3{
+    margin-top:10px;
+
+    font-size:21px;
+    font-weight:600;
+
+    letter-spacing:-.5px;
+
+    color:#111;
+}
+
+
+.roadmapCard p{
+    margin-top:9px;
+
+    font-size:13px;
+    line-height:1.65;
+
+    color:#777;
+}
+
+/* =====================================================
+   MOBILE - SAME ALTERNATING ROADMAP
+===================================================== */
+
+@media(max-width:800px){
+
+    .roadmapSection{
+        padding:80px 8px;
+    }
+
+
+    .roadmapSmallTitle{
+        font-size:9px;
+        letter-spacing:3px;
+    }
+
+
+    .roadmapMainTitle{
+        margin-top:16px;
+
+        font-size:28px;
+        line-height:1.15;
+
+        letter-spacing:-1.1px;
+    }
+
+
+    .roadmapIntro{
+        max-width:290px;
+
+        margin:15px auto 0;
+
+        font-size:12px;
+        line-height:1.65;
+    }
+
+
+    /* ROADMAP */
+
+    .roadmap{
+        position:relative;
+
+        width:100%;
+
+        margin:55px auto 0;
+
+        display:flex;
+        flex-direction:column;
+
+        gap:22px;
+    }
+
+
+    /* CENTER LINE */
+
+    .roadmapLine{
+        position:absolute;
+
+        top:20px;
+        bottom:20px;
+
+        left:50%;
+
+        width:1px;
+
+        background:#dedede;
+
+        transform:translateX(-50%);
+    }
+
+
+    /* EACH STEP */
+
+    .roadmapStep{
+        position:relative;
+
+        width:100%;
+
+        min-height:120px;
+
+        display:flex;
+
+        align-items:center;
+    }
+
+
+    /* LEFT CARD */
+
+    .roadmapStep:nth-of-type(even){
+        justify-content:flex-start;
+    }
+
+
+    .roadmapStep:nth-of-type(even) .roadmapCard{
+        margin-right:54%;
+    }
+
+
+    /* RIGHT CARD */
+
+    .roadmapStep:nth-of-type(odd){
+        justify-content:flex-end;
+    }
+
+
+    .roadmapStep:nth-of-type(odd) .roadmapCard{
+        margin-left:54%;
+    }
+
+
+    /* CENTER ICON */
+
+    .roadmapPoint{
+        position:absolute;
+
+        left:50%;
+
+        width:38px;
+        height:38px;
+
+        border:1px solid #dedede;
+        border-radius:50%;
+
+        background:#fff;
+
+        display:flex;
+        align-items:center;
+        justify-content:center;
+
+        transform:translateX(-50%);
+
+        font-size:12px;
+
+        z-index:2;
+    }
+
+
+    .roadmapPointFinal{
+        background:#111;
+        color:#fff;
+
+        border-color:#111;
+    }
+
+
+    /* CARD */
+
+    .roadmapCard{
+        width:44%;
+
+        padding:13px;
+
+        border-radius:14px;
+
+        background:#fff;
+    }
+
+
+    .roadmapNumber{
+        font-size:7px;
+
+        letter-spacing:1.5px;
+    }
+
+
+    .roadmapCard h3{
+        margin-top:6px;
+
+        font-size:14px;
+        line-height:1.25;
+    }
+
+
+    .roadmapCard p{
+        margin-top:6px;
+
+        font-size:9px;
+        line-height:1.5;
+    }
+
+
+    /* REMOVE HOVER MOVEMENT ON TOUCH */
+
+    .roadmapCard:hover{
+        transform:none;
+        box-shadow:none;
+    }
+
+}
+/* =====================================================
+   FULL HEIGHT BLUE LEFT BORDER
+===================================================== */
+
+.serviceCard,
+.projectCard,
+.techCard,
+.buildCard,
+.roadmapCard{
+    position:relative;
+    overflow:hidden;
+}
+
+
+/* FULL HEIGHT BLUE LINE */
+
+.serviceCard::before,
+.projectCard::before,
+.techCard::before,
+.buildCard::before,
+.roadmapCard::before{
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    top:0;
+    bottom:0;
+
+    width:4px;
+    height:100%;
+
+    background:#17b8d1;
+
+    border-radius:
+        18px 0 0 18px;
+
+    transform:none;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:800px){
+
+    .serviceCard::before,
+    .projectCard::before,
+    .techCard::before,
+    .buildCard::before,
+    .roadmapCard::before{
+        top:0;
+        bottom:0;
+
+        width:4px;
+        height:100%;
+
+        border-radius:
+            16px 0 0 16px;
+
+        transform:none;
+    }
+
+}
+/* =====================================================
+   ROADMAP FLOW ANIMATION
+   PC + MOBILE
+===================================================== */
+
+/* BASE ROAD LINE */
+
+.roadmapLine{
+    width:4px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(71,168,255,.16),
+            rgba(71,168,255,.30),
+            rgba(71,168,255,.16)
+        );
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    z-index:0;
+}
+
+
+/* MOVING WATER / ENERGY INSIDE LINE */
+
+.roadmapLine::before{
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    top:-35%;
+
+    width:100%;
+    height:35%;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            to bottom,
+
+            transparent 0%,
+
+            rgba(71,168,255,.15) 15%,
+
+            #8ae2f6 40%,
+
+            #087BFF 55%,
+
+            #8ae2f6 72%,
+
+            rgba(71,168,255,.15) 88%,
+
+            transparent 100%
+        );
+
+    box-shadow:
+        0 0 8px rgba(71,168,255,.55),
+        0 0 16px rgba(71,168,255,.20);
+
+    animation:
+        roadmapWaterFlow 4s
+        linear
+        infinite;
+
+    will-change:transform;
+}
+
+
+/* FLOW FROM TOP TO BOTTOM */
+
+@keyframes roadmapWaterFlow{
+
+    0%{
+        transform:translate3d(0,0,0);
+    }
+
+    100%{
+        transform:translate3d(0,390%,0);
+    }
+
+}
+
+
+
+/* =====================================================
+   ROADMAP CIRCLE
+===================================================== */
+
+.roadmapPoint{
+    position:absolute;
+
+    overflow:hidden;
+
+    border:2px solid #8ae2f6;
+
+    background:#fff;
+
+    color:#087BFF;
+
+    z-index:3;
+
+    box-shadow:
+        0 0 0 5px rgba(138,226,246,.08),
+        0 5px 20px rgba(0,0,0,.04);
+}
+
+
+/* BLUE FLOW MOVES THROUGH CIRCLE */
+
+.roadmapPoint::before{
+    content:"";
+
+    position:absolute;
+
+    left:-15%;
+    top:-130%;
+
+    width:130%;
+    height:100%;
+
+    background:
+        linear-gradient(
+            to bottom,
+
+            transparent 0%,
+
+            rgba(138,226,246,.18) 20%,
+
+            #8ae2f6 47%,
+
+            #087BFF 58%,
+
+            #8ae2f6 72%,
+
+            transparent 100%
+        );
+
+    animation:
+        roadmapCircleFlow 4s
+        linear
+        infinite;
+
+    z-index:-1;
+
+    will-change:transform;
+}
+
+
+/* ICON MUST STAY ABOVE WATER */
+
+.roadmapPoint i{
+    position:relative;
+
+    z-index:2;
+}
+
+
+/* CIRCLE FLOW */
+
+@keyframes roadmapCircleFlow{
+
+    0%{
+        transform:translate3d(0,-50%,0);
+    }
+
+    100%{
+        transform:translate3d(0,250%,0);
+    }
+
+}
+
+
+
+/* =====================================================
+   CIRCLE PULSE WHEN FLOW PASSES
+===================================================== */
+
+.roadmapPoint{
+    animation:
+        roadmapPointPulse
+        4s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes roadmapPointPulse{
+
+    0%,
+    15%,
+    100%{
+        box-shadow:
+            0 0 0 4px rgba(138,226,246,.06),
+            0 5px 20px rgba(0,0,0,.04);
+    }
+
+    50%{
+        box-shadow:
+            0 0 0 8px rgba(138,226,246,.13),
+            0 0 22px rgba(71,168,255,.18);
+    }
+
+}
+
+
+
+/* =====================================================
+   DELAY EACH CIRCLE
+   MAKES WATER LOOK LIKE IT TRAVELS
+===================================================== */
+
+.roadmapStep:nth-child(2) .roadmapPoint,
+.roadmapStep:nth-child(2) .roadmapPoint::before{
+    animation-delay:0s;
+}
+
+
+.roadmapStep:nth-child(3) .roadmapPoint,
+.roadmapStep:nth-child(3) .roadmapPoint::before{
+    animation-delay:.45s;
+}
+
+
+.roadmapStep:nth-child(4) .roadmapPoint,
+.roadmapStep:nth-child(4) .roadmapPoint::before{
+    animation-delay:.9s;
+}
+
+
+.roadmapStep:nth-child(5) .roadmapPoint,
+.roadmapStep:nth-child(5) .roadmapPoint::before{
+    animation-delay:1.35s;
+}
+
+
+.roadmapStep:nth-child(6) .roadmapPoint,
+.roadmapStep:nth-child(6) .roadmapPoint::before{
+    animation-delay:1.8s;
+}
+
+
+.roadmapStep:nth-child(7) .roadmapPoint,
+.roadmapStep:nth-child(7) .roadmapPoint::before{
+    animation-delay:2.25s;
+}
+
+
+
+/* =====================================================
+   FINAL LAUNCH POINT
+===================================================== */
+
+.roadmapPointFinal{
+    border-color:#087BFF;
+
+    background:#087BFF;
+
+    color:#fff;
+
+    box-shadow:
+        0 0 0 5px rgba(8,123,255,.10),
+        0 0 22px rgba(8,123,255,.20);
+}
+
+
+.roadmapPointFinal::before{
+    background:
+        linear-gradient(
+            to bottom,
+
+            transparent,
+
+            rgba(255,255,255,.18),
+
+            rgba(255,255,255,.45),
+
+            transparent
+        );
+}
+
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:800px){
+
+    .roadmapLine{
+        width:3px;
+    }
+
+
+    .roadmapLine::before{
+        height:30%;
+
+        animation-duration:4.5s;
+    }
+
+
+    .roadmapPoint{
+        border-width:1.5px;
+    }
+
+
+    .roadmapPoint::before{
+        animation-duration:4.5s;
+    }
+
+
+    .roadmapPoint{
+        animation-duration:4.5s;
+    }
+
+}
+
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media(prefers-reduced-motion:reduce){
+
+    .roadmapLine::before,
+    .roadmapPoint,
+    .roadmapPoint::before{
+        animation:none !important;
+    }
+
+}
