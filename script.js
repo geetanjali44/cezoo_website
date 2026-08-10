@@ -469,27 +469,19 @@ function openService(type){
     }
 
 
-    /* SET TITLE */
-
     serviceTitle.textContent =
         service.title;
 
 
-    /* SET DESCRIPTION */
-
     serviceDescription.textContent =
         service.description;
 
-
-    /* SET MAIN ICON */
 
     mainServiceIcon.innerHTML = `
         <i class="${service.icon}"></i>
     `;
 
 
-
-    /* TECHNOLOGIES */
 
     technologyGrid.innerHTML =
         service.technologies
@@ -509,8 +501,6 @@ function openService(type){
             .join("");
 
 
-
-    /* WHAT WE BUILD */
 
     buildGrid.innerHTML =
         service.builds
@@ -535,20 +525,12 @@ function openService(type){
 
 
 
-    /* CLOSE MENU */
-
     closeMenu();
 
-
-
-    /* DISABLE SMOOTH SCROLL TEMPORARILY */
 
     document.documentElement.style.scrollBehavior =
         "auto";
 
-
-
-    /* RESET CURRENT PAGE SCROLL BEFORE SWITCHING */
 
     window.scrollTo(0,0);
 
@@ -557,30 +539,18 @@ function openService(type){
     document.body.scrollTop = 0;
 
 
-
-    /* HIDE MAIN WEBSITE */
-
     mainWebsite.style.display =
         "none";
 
-
-
-    /* SHOW SERVICE PAGE */
 
     servicePage
         .classList
         .add("active");
 
 
-
-    /* ENABLE NORMAL SCROLL */
-
     document.body.style.overflow =
         "";
 
-
-
-    /* FORCE SERVICE PAGE TO TOP */
 
     servicePage.scrollTop = 0;
 
@@ -591,16 +561,10 @@ function openService(type){
     window.scrollTo(0,0);
 
 
-
-    /* PAGE TITLE */
-
     document.title =
         service.title +
         " | Cezonal Solutions";
 
-
-
-    /* URL */
 
     history.pushState(
         {
@@ -610,9 +574,6 @@ function openService(type){
         "#service-" + type
     );
 
-
-
-    /* FINAL TOP RESET AFTER BROWSER PAINT */
 
     requestAnimationFrame(() => {
 
@@ -640,7 +601,6 @@ function openService(type){
 
 /* =====================================================
    CLOSE SERVICE PAGE
-   RETURNS TO SERVICES
 ===================================================== */
 
 function closeServicePage(){
@@ -919,3 +879,530 @@ window.addEventListener(
 
     }
 );
+
+
+
+/* =====================================================
+   HERO 3-CARD COVERFLOW CAROUSEL
+===================================================== */
+
+const coverflow =
+    document.getElementById(
+        "heroCoverflow"
+    );
+
+
+const coverflowCards =
+    Array.from(
+        document.querySelectorAll(
+            ".coverflowCard"
+        )
+    );
+
+
+const coverflowDots =
+    Array.from(
+        document.querySelectorAll(
+            ".coverflowDot"
+        )
+    );
+
+
+const coverflowPrev =
+    document.getElementById(
+        "coverflowPrev"
+    );
+
+
+const coverflowNext =
+    document.getElementById(
+        "coverflowNext"
+    );
+
+
+let coverflowActive = 0;
+
+let coverflowTimer = null;
+
+let coverflowStartX = 0;
+
+let coverflowMoveX = 0;
+
+let coverflowPointerDown = false;
+
+
+
+/* =====================================================
+   POSITION 3 CARDS
+===================================================== */
+
+function renderCoverflow(){
+
+    const total =
+        coverflowCards.length;
+
+
+    if(total !== 3){
+        return;
+    }
+
+
+    const leftIndex =
+        (
+            coverflowActive
+            - 1
+            + total
+        ) % total;
+
+
+    const rightIndex =
+        (
+            coverflowActive
+            + 1
+        ) % total;
+
+
+
+    coverflowCards.forEach(
+        (card,index) => {
+
+            card.classList.remove(
+                "is-active",
+                "is-left",
+                "is-right"
+            );
+
+
+            if(
+                index ===
+                coverflowActive
+            ){
+
+                card.classList.add(
+                    "is-active"
+                );
+
+            }
+
+            else if(
+                index ===
+                leftIndex
+            ){
+
+                card.classList.add(
+                    "is-left"
+                );
+
+            }
+
+            else if(
+                index ===
+                rightIndex
+            ){
+
+                card.classList.add(
+                    "is-right"
+                );
+
+            }
+
+        }
+    );
+
+
+
+    coverflowDots.forEach(
+        (dot,index) => {
+
+            dot.classList.toggle(
+                "active",
+                index ===
+                coverflowActive
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   SET CARD
+===================================================== */
+
+function setCoverflow(index){
+
+    const total =
+        coverflowCards.length;
+
+
+    if(!total){
+        return;
+    }
+
+
+    coverflowActive =
+        (
+            index
+            + total
+        ) % total;
+
+
+    renderCoverflow();
+
+}
+
+
+
+/* NEXT */
+
+function nextCoverflow(){
+
+    setCoverflow(
+        coverflowActive + 1
+    );
+
+}
+
+
+
+/* PREVIOUS */
+
+function previousCoverflow(){
+
+    setCoverflow(
+        coverflowActive - 1
+    );
+
+}
+
+
+
+/* =====================================================
+   AUTO ROTATION
+===================================================== */
+
+function stopCoverflowAuto(){
+
+    if(coverflowTimer){
+
+        clearInterval(
+            coverflowTimer
+        );
+
+
+        coverflowTimer =
+            null;
+
+    }
+
+}
+
+
+
+function startCoverflowAuto(){
+
+    stopCoverflowAuto();
+
+
+    if(
+        document.hidden ||
+        coverflowCards.length !== 3
+    ){
+        return;
+    }
+
+
+    coverflowTimer =
+        setInterval(
+            nextCoverflow,
+            3200
+        );
+
+}
+
+
+
+function restartCoverflowAuto(){
+
+    stopCoverflowAuto();
+
+    startCoverflowAuto();
+
+}
+
+
+
+/* =====================================================
+   PREVIOUS BUTTON
+===================================================== */
+
+if(coverflowPrev){
+
+    coverflowPrev
+        .addEventListener(
+            "click",
+            () => {
+
+                previousCoverflow();
+
+                restartCoverflowAuto();
+
+            }
+        );
+
+}
+
+
+
+/* =====================================================
+   NEXT BUTTON
+===================================================== */
+
+if(coverflowNext){
+
+    coverflowNext
+        .addEventListener(
+            "click",
+            () => {
+
+                nextCoverflow();
+
+                restartCoverflowAuto();
+
+            }
+        );
+
+}
+
+
+
+/* =====================================================
+   CLICK LEFT / RIGHT CARD
+===================================================== */
+
+coverflowCards.forEach(
+    (card,index) => {
+
+        card.addEventListener(
+            "click",
+            () => {
+
+                if(
+                    index ===
+                    coverflowActive
+                ){
+                    return;
+                }
+
+
+                setCoverflow(
+                    index
+                );
+
+
+                restartCoverflowAuto();
+
+            }
+        );
+
+    }
+);
+
+
+
+/* =====================================================
+   DOTS
+===================================================== */
+
+coverflowDots.forEach(
+    (dot,index) => {
+
+        dot.addEventListener(
+            "click",
+            () => {
+
+                setCoverflow(
+                    index
+                );
+
+
+                restartCoverflowAuto();
+
+            }
+        );
+
+    }
+);
+
+
+
+/* =====================================================
+   TOUCH / POINTER SWIPE
+===================================================== */
+
+if(coverflow){
+
+    coverflow.addEventListener(
+        "pointerdown",
+        event => {
+
+            coverflowPointerDown =
+                true;
+
+
+            coverflowStartX =
+                event.clientX;
+
+
+            coverflowMoveX =
+                0;
+
+
+            stopCoverflowAuto();
+
+        }
+    );
+
+
+
+    coverflow.addEventListener(
+        "pointermove",
+        event => {
+
+            if(
+                !coverflowPointerDown
+            ){
+                return;
+            }
+
+
+            coverflowMoveX =
+                event.clientX -
+                coverflowStartX;
+
+        }
+    );
+
+
+
+    const finishCoverflowSwipe =
+        () => {
+
+            if(
+                !coverflowPointerDown
+            ){
+                return;
+            }
+
+
+            coverflowPointerDown =
+                false;
+
+
+
+            if(
+                Math.abs(
+                    coverflowMoveX
+                ) > 45
+            ){
+
+                if(
+                    coverflowMoveX < 0
+                ){
+
+                    nextCoverflow();
+
+                }
+
+                else{
+
+                    previousCoverflow();
+
+                }
+
+            }
+
+
+            coverflowMoveX =
+                0;
+
+
+            startCoverflowAuto();
+
+        };
+
+
+
+    coverflow.addEventListener(
+        "pointerup",
+        finishCoverflowSwipe
+    );
+
+
+    coverflow.addEventListener(
+        "pointercancel",
+        finishCoverflowSwipe
+    );
+
+
+    coverflow.addEventListener(
+        "pointerleave",
+        event => {
+
+            if(
+                coverflowPointerDown &&
+                event.pointerType ===
+                "mouse"
+            ){
+
+                finishCoverflowSwipe();
+
+            }
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   PAUSE WHEN TAB IS HIDDEN
+===================================================== */
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if(document.hidden){
+
+            stopCoverflowAuto();
+
+        }
+
+        else{
+
+            startCoverflowAuto();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   INITIALIZE COVERFLOW
+===================================================== */
+
+if(
+    coverflowCards.length === 3
+){
+
+    renderCoverflow();
+
+    startCoverflowAuto();
+
+}
