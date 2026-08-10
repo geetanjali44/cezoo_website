@@ -574,14 +574,25 @@ body.page-hidden .dashboardWaveBg svg{
 
     padding:90px 40px;
 
-    display:flex;
+    display:grid;
+
+    grid-template-columns:
+        minmax(0,1.06fr)
+        minmax(430px,.94fr);
 
     align-items:center;
+
+    gap:64px;
 }
 
 
 .heroContent{
-    max-width:850px;
+    width:100%;
+    max-width:760px;
+
+    position:relative;
+
+    z-index:2;
 }
 
 
@@ -661,6 +672,263 @@ body.page-hidden .dashboardWaveBg svg{
     color:#111;
 
     border:1px solid #ddd;
+}
+
+
+
+/* =====================================================
+   HERO 3-CARD COVERFLOW
+===================================================== */
+
+.heroCoverflow{
+    width:100%;
+    height:470px;
+
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+
+    user-select:none;
+    -webkit-user-select:none;
+
+    touch-action:pan-y;
+
+    contain:layout paint;
+
+    isolation:isolate;
+}
+
+
+.coverflowStage{
+    width:100%;
+    height:400px;
+
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    perspective:1100px;
+
+    transform:translateZ(0);
+}
+
+
+.coverflowCard{
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    width:285px;
+    height:370px;
+
+    border:1px solid #8ae2f6;
+    border-radius:24px;
+
+    background:#fff;
+
+    overflow:hidden;
+
+    transform:
+        translate3d(-50%,-50%,0)
+        scale(.78);
+
+    opacity:.72;
+
+    transition:
+        transform .62s cubic-bezier(.22,1,.36,1),
+        opacity .38s ease;
+
+    will-change:transform,opacity;
+
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 14px 35px rgba(0,0,0,.05);
+}
+
+
+.coverflowCard img{
+    width:100%;
+    height:100%;
+
+    display:block;
+
+    object-fit:cover;
+
+    pointer-events:none;
+
+    transform:translateZ(0);
+
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+}
+
+
+/* CENTER */
+
+.coverflowCard.is-active{
+    z-index:3;
+
+    opacity:1;
+
+    transform:
+        translate3d(-50%,-50%,0)
+        scale(1);
+
+    box-shadow:
+        0 20px 45px rgba(0,0,0,.09);
+}
+
+
+/* LEFT */
+
+.coverflowCard.is-left{
+    z-index:2;
+
+    opacity:.78;
+
+    transform:
+        translate3d(
+            calc(-50% - 175px),
+            -50%,
+            0
+        )
+        scale(.82)
+        rotateY(8deg);
+}
+
+
+/* RIGHT */
+
+.coverflowCard.is-right{
+    z-index:2;
+
+    opacity:.78;
+
+    transform:
+        translate3d(
+            calc(-50% + 175px),
+            -50%,
+            0
+        )
+        scale(.82)
+        rotateY(-8deg);
+}
+
+
+/* NAVIGATION */
+
+.coverflowNav{
+    position:absolute;
+
+    top:50%;
+
+    width:42px;
+    height:42px;
+
+    border:1px solid rgba(138,226,246,.9);
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.92);
+
+    color:#111;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    transform:translateY(-50%) translateZ(0);
+
+    cursor:pointer;
+
+    z-index:10;
+
+    font-size:12px;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        color .2s ease;
+
+    -webkit-tap-highlight-color:transparent;
+}
+
+
+.coverflowPrev{
+    left:4px;
+}
+
+
+.coverflowNext{
+    right:4px;
+}
+
+
+.coverflowNav:hover{
+    background:#111;
+
+    color:#fff;
+
+    border-color:#111;
+}
+
+
+/* DOTS */
+
+.coverflowDots{
+    position:absolute;
+
+    left:50%;
+    bottom:4px;
+
+    transform:translateX(-50%);
+
+    display:flex;
+    align-items:center;
+
+    gap:7px;
+
+    z-index:10;
+}
+
+
+.coverflowDot{
+    width:7px;
+    height:7px;
+
+    padding:0;
+
+    border:0;
+
+    border-radius:20px;
+
+    background:#cfeff7;
+
+    cursor:pointer;
+
+    transition:
+        width .25s ease,
+        background .25s ease;
+
+    -webkit-tap-highlight-color:transparent;
+}
+
+
+.coverflowDot.active{
+    width:25px;
+
+    background:#47A8FF;
 }
 
 
@@ -1564,6 +1832,61 @@ footer p{
 
 
 
+
+/* =====================================================
+   HERO COVERFLOW - TABLET
+===================================================== */
+
+@media(max-width:1100px) and (min-width:801px){
+
+    .heroSection{
+        grid-template-columns:
+            minmax(0,1fr)
+            minmax(350px,.9fr);
+
+        gap:35px;
+
+        padding-left:28px;
+        padding-right:28px;
+    }
+
+
+    .heroContent h1{
+        font-size:58px;
+    }
+
+
+    .coverflowCard{
+        width:235px;
+        height:325px;
+    }
+
+
+    .coverflowCard.is-left{
+        transform:
+            translate3d(
+                calc(-50% - 140px),
+                -50%,
+                0
+            )
+            scale(.80)
+            rotateY(8deg);
+    }
+
+
+    .coverflowCard.is-right{
+        transform:
+            translate3d(
+                calc(-50% + 140px),
+                -50%,
+                0
+            )
+            scale(.80)
+            rotateY(-8deg);
+    }
+
+}
+
 /* =====================================================
    MOBILE
 ===================================================== */
@@ -1611,14 +1934,25 @@ footer p{
         font-size:19px;
     }
 
-
-
     /* HERO */
 
     .heroSection{
         min-height:auto;
 
         padding:70px 8px 85px;
+
+        display:flex;
+        flex-direction:column;
+
+        align-items:stretch;
+
+        gap:42px;
+    }
+
+
+    .heroContent{
+        width:100%;
+        max-width:none;
     }
 
 
@@ -1647,8 +1981,103 @@ footer p{
     }
 
 
+    /* MOBILE 3-CARD COVERFLOW */
 
-    /* STATEMENT */
+    .heroCoverflow{
+        width:calc(100% + 16px);
+
+        height:330px;
+
+        margin-left:-8px;
+
+        overflow:hidden;
+    }
+
+
+    .coverflowStage{
+        height:290px;
+
+        perspective:850px;
+    }
+
+
+    .coverflowCard{
+        width:170px;
+        height:245px;
+
+        border-radius:18px;
+
+        transition:
+            transform .5s cubic-bezier(.22,1,.36,1),
+            opacity .3s ease;
+    }
+
+
+    .coverflowCard.is-active{
+        transform:
+            translate3d(-50%,-50%,0)
+            scale(1);
+    }
+
+
+    .coverflowCard.is-left{
+        transform:
+            translate3d(
+                calc(-50% - 104px),
+                -50%,
+                0
+            )
+            scale(.80)
+            rotateY(7deg);
+    }
+
+
+    .coverflowCard.is-right{
+        transform:
+            translate3d(
+                calc(-50% + 104px),
+                -50%,
+                0
+            )
+            scale(.80)
+            rotateY(-7deg);
+    }
+
+
+    .coverflowNav{
+        width:36px;
+        height:36px;
+
+        font-size:10px;
+    }
+
+
+    .coverflowPrev{
+        left:4px;
+    }
+
+
+    .coverflowNext{
+        right:4px;
+    }
+
+
+    .coverflowDots{
+        bottom:2px;
+    }
+
+
+    .coverflowDot{
+        width:6px;
+        height:6px;
+    }
+
+
+    .coverflowDot.active{
+        width:20px;
+    }
+
+/* STATEMENT */
 
     .statementSection{
         padding:85px 8px;
