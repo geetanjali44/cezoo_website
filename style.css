@@ -34,7 +34,8 @@ body{
 
 
 /* =====================================================
-   WAVE BACKGROUND
+   ULTRA SMOOTH WAVE BACKGROUND
+   PC + MOBILE
 ===================================================== */
 
 .dashboardWaveBg{
@@ -52,8 +53,15 @@ body{
     z-index:-1;
 
     background:#fff;
+
+    contain:paint;
 }
 
+
+/* =====================================================
+   SVG
+   ONLY ONE MAIN MOVEMENT
+===================================================== */
 
 .dashboardWaveBg svg{
     position:absolute;
@@ -64,18 +72,38 @@ body{
     width:124%;
     height:124%;
 
+    transform:translate3d(0,0,0);
+
     animation:
-        waveContainerMove 12s ease-in-out infinite alternate;
+        smoothWaveMove
+        14s
+        ease-in-out
+        infinite
+        alternate;
+
+    will-change:transform;
+
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
 }
 
+
+/* =====================================================
+   DON'T ANIMATE THE WHOLE GROUP
+===================================================== */
 
 .waveLines{
-    transform-origin:center;
+    transform:none;
 
-    animation:
-        waveGroupFloat 8s ease-in-out infinite alternate;
+    animation:none;
+
+    will-change:auto;
 }
 
+
+/* =====================================================
+   WAVE LINES
+===================================================== */
 
 .waveLines path{
     fill:none;
@@ -84,104 +112,135 @@ body{
 
     stroke-width:1.2;
 
-    opacity:.7;
+    opacity:.62;
 
     vector-effect:non-scaling-stroke;
 
-    animation:
-        flowWave 6s ease-in-out infinite alternate;
+    /*
+       Important:
+       Do NOT animate every individual SVG path.
+       This greatly reduces lag.
+    */
+    animation:none;
 }
 
 
-.waveLines path:nth-child(2){
-    animation-delay:-.4s;
-}
+/* =====================================================
+   SMOOTH WHOLE-WAVE MOVEMENT
+===================================================== */
 
-.waveLines path:nth-child(3){
-    animation-delay:-.8s;
-}
-
-.waveLines path:nth-child(4){
-    animation-delay:-1.2s;
-}
-
-.waveLines path:nth-child(5){
-    animation-delay:-1.6s;
-}
-
-.waveLines path:nth-child(6){
-    animation-delay:-2s;
-}
-
-.waveLines path:nth-child(7){
-    animation-delay:-2.4s;
-}
-
-.waveLines path:nth-child(8){
-    animation-delay:-2.8s;
-}
-
-.waveLines path:nth-child(9){
-    animation-delay:-3.2s;
-}
-
-.waveLines path:nth-child(10){
-    animation-delay:-3.6s;
-}
-
-
-
-@keyframes flowWave{
+@keyframes smoothWaveMove{
 
     0%{
         transform:
-            translate3d(-45px,-30px,0)
-            rotate(-1.5deg);
+            translate3d(-1.2%,-.8%,0)
+            scale(1);
     }
 
+    50%{
+        transform:
+            translate3d(.3%,.4%,0)
+            scale(1.006);
+    }
 
     100%{
         transform:
-            translate3d(45px,30px,0)
-            rotate(1.5deg);
+            translate3d(1.2%,.9%,0)
+            scale(1);
     }
 
 }
 
 
 
-@keyframes waveGroupFloat{
+/* =====================================================
+   MOBILE
+   SAME WAVE - OPTIMIZED
+===================================================== */
 
-    from{
-        transform:
-            translate3d(-15px,-10px,0);
+@media(max-width:800px){
+
+    .dashboardWaveBg svg{
+
+        top:-5%;
+        left:-48%;
+
+        width:200%;
+        height:118%;
+
+        animation:
+            smoothMobileWaveMove
+            16s
+            ease-in-out
+            infinite
+            alternate;
     }
 
 
-    to{
-        transform:
-            translate3d(18px,12px,0);
+    .waveLines path{
+        stroke-width:.85;
+
+        opacity:.48;
+    }
+
+
+    @keyframes smoothMobileWaveMove{
+
+        0%{
+            transform:
+                translate3d(-1%,0,0);
+        }
+
+        50%{
+            transform:
+                translate3d(0,.5%,0);
+        }
+
+        100%{
+            transform:
+                translate3d(1%,1%,0);
+        }
+
     }
 
 }
 
 
 
-@keyframes waveContainerMove{
+/* =====================================================
+   PAUSE BACKGROUND WHEN SIDE MENU OPENS
+===================================================== */
 
-    from{
-        transform:
-            translate3d(-1.5%,-1%,0);
-    }
+body.menu-open .dashboardWaveBg svg{
+    animation-play-state:paused;
+}
 
 
-    to{
-        transform:
-            translate3d(1.5%,1%,0);
+
+/* =====================================================
+   OPTIONAL:
+   STOP ANIMATION WHEN TAB IS NOT ACTIVE
+===================================================== */
+
+body.page-hidden .dashboardWaveBg svg{
+    animation-play-state:paused;
+}
+
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media(prefers-reduced-motion:reduce){
+
+    .dashboardWaveBg svg{
+        animation:none !important;
+
+        transform:none !important;
     }
 
 }
-
 
 
 /* =====================================================
@@ -2629,32 +2688,44 @@ body.menu-open .waveLines path{
 
 }
 /* =====================================================
-   ROADMAP FLOW ANIMATION
+   ULTRA SMOOTH ROADMAP FLOW
    PC + MOBILE
+   ONLY TRANSFORM + OPACITY
 ===================================================== */
 
-/* BASE ROAD LINE */
+
+/* =====================================================
+   BASE ROAD LINE
+===================================================== */
 
 .roadmapLine{
-    width:4px;
+    position:absolute;
 
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(71,168,255,.16),
-            rgba(71,168,255,.30),
-            rgba(71,168,255,.16)
-        );
+    top:25px;
+    bottom:25px;
+
+    left:50%;
+
+    width:3px;
+
+    background:rgba(138,226,246,.35);
 
     border-radius:20px;
+
+    transform:translateX(-50%);
 
     overflow:hidden;
 
     z-index:0;
+
+    contain:paint;
 }
 
 
-/* MOVING WATER / ENERGY INSIDE LINE */
+/* =====================================================
+   MOVING FLOW
+   ONE SIMPLE GPU LAYER ONLY
+===================================================== */
 
 .roadmapLine::before{
     content:"";
@@ -2662,55 +2733,49 @@ body.menu-open .waveLines path{
     position:absolute;
 
     left:0;
-    top:-35%;
+    top:0;
 
     width:100%;
-    height:35%;
+    height:110px;
 
     border-radius:20px;
 
     background:
         linear-gradient(
             to bottom,
-
-            transparent 0%,
-
-            rgba(71,168,255,.15) 15%,
-
-            #8ae2f6 40%,
-
-            #087BFF 55%,
-
-            #8ae2f6 72%,
-
-            rgba(71,168,255,.15) 88%,
-
-            transparent 100%
+            rgba(8,123,255,0) 0%,
+            rgba(138,226,246,.55) 25%,
+            #087BFF 50%,
+            rgba(138,226,246,.55) 75%,
+            rgba(8,123,255,0) 100%
         );
 
-    box-shadow:
-        0 0 8px rgba(71,168,255,.55),
-        0 0 16px rgba(71,168,255,.20);
+    transform:translate3d(0,-120px,0);
 
     animation:
-        roadmapWaterFlow 4s
+        roadmapSmoothFlow 5.5s
         linear
         infinite;
 
     will-change:transform;
+
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
 }
 
 
-/* FLOW FROM TOP TO BOTTOM */
+/* ONE CONTINUOUS DOWNWARD FLOW */
 
-@keyframes roadmapWaterFlow{
+@keyframes roadmapSmoothFlow{
 
-    0%{
-        transform:translate3d(0,0,0);
+    from{
+        transform:
+            translate3d(0,-120px,0);
     }
 
-    100%{
-        transform:translate3d(0,390%,0);
+    to{
+        transform:
+            translate3d(0,1050px,0);
     }
 
 }
@@ -2718,70 +2783,82 @@ body.menu-open .waveLines path{
 
 
 /* =====================================================
-   ROADMAP CIRCLE
+   ROADMAP CIRCLES
 ===================================================== */
 
 .roadmapPoint{
     position:absolute;
 
-    overflow:hidden;
+    left:50%;
+
+    width:50px;
+    height:50px;
 
     border:2px solid #8ae2f6;
+
+    border-radius:50%;
 
     background:#fff;
 
     color:#087BFF;
 
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    transform:translate3d(-50%,0,0);
+
     z-index:3;
 
-    box-shadow:
-        0 0 0 5px rgba(138,226,246,.08),
-        0 5px 20px rgba(0,0,0,.04);
+    overflow:hidden;
+
+    box-shadow:none;
+
+    contain:paint;
 }
 
 
-/* BLUE FLOW MOVES THROUGH CIRCLE */
+/* =====================================================
+   VERY LIGHT CIRCLE FLOW
+===================================================== */
 
 .roadmapPoint::before{
     content:"";
 
     position:absolute;
 
-    left:-15%;
-    top:-130%;
+    left:0;
+    top:-100%;
 
-    width:130%;
+    width:100%;
     height:100%;
 
     background:
         linear-gradient(
             to bottom,
-
-            transparent 0%,
-
-            rgba(138,226,246,.18) 20%,
-
-            #8ae2f6 47%,
-
-            #087BFF 58%,
-
-            #8ae2f6 72%,
-
-            transparent 100%
+            transparent,
+            rgba(138,226,246,.35),
+            rgba(8,123,255,.16),
+            transparent
         );
 
+    transform:translate3d(0,-100%,0);
+
     animation:
-        roadmapCircleFlow 4s
+        roadmapPointFlow
+        5.5s
         linear
         infinite;
 
-    z-index:-1;
-
     will-change:transform;
+
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
 }
 
 
-/* ICON MUST STAY ABOVE WATER */
+/* ICON ABOVE FLOW */
 
 .roadmapPoint i{
     position:relative;
@@ -2792,14 +2869,26 @@ body.menu-open .waveLines path{
 
 /* CIRCLE FLOW */
 
-@keyframes roadmapCircleFlow{
+@keyframes roadmapPointFlow{
 
     0%{
-        transform:translate3d(0,-50%,0);
+        transform:
+            translate3d(0,-110%,0);
+    }
+
+    12%{
+        transform:
+            translate3d(0,-110%,0);
+    }
+
+    23%{
+        transform:
+            translate3d(0,110%,0);
     }
 
     100%{
-        transform:translate3d(0,250%,0);
+        transform:
+            translate3d(0,110%,0);
     }
 
 }
@@ -2807,94 +2896,46 @@ body.menu-open .waveLines path{
 
 
 /* =====================================================
-   CIRCLE PULSE WHEN FLOW PASSES
+   CIRCLE DELAYS
+   FLOW REACHES EACH POINT IN ORDER
 ===================================================== */
 
-.roadmapPoint{
-    animation:
-        roadmapPointPulse
-        4s
-        ease-in-out
-        infinite;
-}
-
-
-@keyframes roadmapPointPulse{
-
-    0%,
-    15%,
-    100%{
-        box-shadow:
-            0 0 0 4px rgba(138,226,246,.06),
-            0 5px 20px rgba(0,0,0,.04);
-    }
-
-    50%{
-        box-shadow:
-            0 0 0 8px rgba(138,226,246,.13),
-            0 0 22px rgba(71,168,255,.18);
-    }
-
-}
-
-
-
-/* =====================================================
-   DELAY EACH CIRCLE
-   MAKES WATER LOOK LIKE IT TRAVELS
-===================================================== */
-
-.roadmapStep:nth-child(2) .roadmapPoint,
 .roadmapStep:nth-child(2) .roadmapPoint::before{
     animation-delay:0s;
 }
 
-
-.roadmapStep:nth-child(3) .roadmapPoint,
 .roadmapStep:nth-child(3) .roadmapPoint::before{
-    animation-delay:.45s;
+    animation-delay:.65s;
 }
 
-
-.roadmapStep:nth-child(4) .roadmapPoint,
 .roadmapStep:nth-child(4) .roadmapPoint::before{
-    animation-delay:.9s;
+    animation-delay:1.3s;
 }
 
-
-.roadmapStep:nth-child(5) .roadmapPoint,
 .roadmapStep:nth-child(5) .roadmapPoint::before{
-    animation-delay:1.35s;
+    animation-delay:1.95s;
 }
 
-
-.roadmapStep:nth-child(6) .roadmapPoint,
 .roadmapStep:nth-child(6) .roadmapPoint::before{
-    animation-delay:1.8s;
+    animation-delay:2.6s;
 }
 
-
-.roadmapStep:nth-child(7) .roadmapPoint,
 .roadmapStep:nth-child(7) .roadmapPoint::before{
-    animation-delay:2.25s;
+    animation-delay:3.25s;
 }
 
 
 
 /* =====================================================
-   FINAL LAUNCH POINT
+   FINAL POINT
 ===================================================== */
 
 .roadmapPointFinal{
-    border-color:#087BFF;
-
     background:#087BFF;
 
-    color:#fff;
+    border-color:#087BFF;
 
-    box-shadow:
-        0 0 0 5px rgba(8,123,255,.10),
-        0 0 22px rgba(8,123,255,.20);
+    color:#fff;
 }
 
 
@@ -2902,15 +2943,22 @@ body.menu-open .waveLines path{
     background:
         linear-gradient(
             to bottom,
-
             transparent,
-
-            rgba(255,255,255,.18),
-
-            rgba(255,255,255,.45),
-
+            rgba(255,255,255,.28),
             transparent
         );
+}
+
+
+
+/* =====================================================
+   PAUSE ROADMAP WHEN MENU IS OPEN
+   REDUCES GPU WORK
+===================================================== */
+
+body.menu-open .roadmapLine::before,
+body.menu-open .roadmapPoint::before{
+    animation-play-state:paused;
 }
 
 
@@ -2922,29 +2970,79 @@ body.menu-open .waveLines path{
 @media(max-width:800px){
 
     .roadmapLine{
-        width:3px;
+        top:20px;
+        bottom:20px;
+
+        left:50%;
+
+        width:2px;
+
+        transform:translateX(-50%);
     }
 
 
     .roadmapLine::before{
-        height:30%;
+        height:80px;
 
-        animation-duration:4.5s;
+        animation-duration:6s;
+
+        transform:
+            translate3d(0,-90px,0);
+    }
+
+
+    @keyframes roadmapSmoothFlow{
+
+        from{
+            transform:
+                translate3d(0,-90px,0);
+        }
+
+        to{
+            transform:
+                translate3d(0,880px,0);
+        }
+
     }
 
 
     .roadmapPoint{
+        width:38px;
+        height:38px;
+
         border-width:1.5px;
+
+        font-size:12px;
     }
 
 
     .roadmapPoint::before{
-        animation-duration:4.5s;
+        animation-duration:6s;
     }
 
 
-    .roadmapPoint{
-        animation-duration:4.5s;
+    .roadmapStep:nth-child(2) .roadmapPoint::before{
+        animation-delay:0s;
+    }
+
+    .roadmapStep:nth-child(3) .roadmapPoint::before{
+        animation-delay:.7s;
+    }
+
+    .roadmapStep:nth-child(4) .roadmapPoint::before{
+        animation-delay:1.4s;
+    }
+
+    .roadmapStep:nth-child(5) .roadmapPoint::before{
+        animation-delay:2.1s;
+    }
+
+    .roadmapStep:nth-child(6) .roadmapPoint::before{
+        animation-delay:2.8s;
+    }
+
+    .roadmapStep:nth-child(7) .roadmapPoint::before{
+        animation-delay:3.5s;
     }
 
 }
@@ -2958,7 +3056,6 @@ body.menu-open .waveLines path{
 @media(prefers-reduced-motion:reduce){
 
     .roadmapLine::before,
-    .roadmapPoint,
     .roadmapPoint::before{
         animation:none !important;
     }
