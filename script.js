@@ -1406,3 +1406,121 @@ if(
     startCoverflowAuto();
 
 }
+
+/* =====================================================
+   CONTACT DETAILS PAGE
+===================================================== */
+
+const contactPage =
+    document.getElementById("contactPage");
+
+
+function openContactPage(){
+
+    // close side menu if open
+    closeMenu();
+
+
+    // hide main website
+    mainWebsite.style.display = "none";
+
+
+    // hide service page
+    if(servicePage){
+        servicePage.classList.remove("active");
+    }
+
+
+    // show contact page
+    contactPage.classList.add("active");
+
+
+    // unlock scrolling
+    document.body.style.overflow = "";
+
+
+    // page title
+    document.title =
+        "Contact | Cezonal Solutions";
+
+
+    // URL
+    history.pushState(
+        {
+            page:"contact"
+        },
+        "",
+        "#contact-details"
+    );
+
+
+    // ALWAYS OPEN FROM TOP
+    document.documentElement.style.scrollBehavior =
+        "auto";
+
+    window.scrollTo(0,0);
+
+    document.documentElement.scrollTop = 0;
+
+    document.body.scrollTop = 0;
+
+    contactPage.scrollTop = 0;
+
+
+    requestAnimationFrame(() => {
+
+        window.scrollTo(0,0);
+
+        document.documentElement.scrollTop = 0;
+
+        document.body.scrollTop = 0;
+
+
+        requestAnimationFrame(() => {
+
+            document.documentElement.style.scrollBehavior =
+                "";
+
+        });
+
+    });
+
+}
+
+
+
+function closeContactPage(){
+
+    contactPage.classList.remove("active");
+
+
+    mainWebsite.style.display =
+        "block";
+
+
+    document.body.style.overflow =
+        "";
+
+
+    document.title =
+        "Cezonal Solutions Private Limited";
+
+
+    history.replaceState(
+        {},
+        "",
+        "#home"
+    );
+
+
+    requestAnimationFrame(() => {
+
+        window.scrollTo({
+            top:0,
+            left:0,
+            behavior:"smooth"
+        });
+
+    });
+
+}
