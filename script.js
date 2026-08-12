@@ -16,7 +16,7 @@ const menuOverlay =
 
 
 /* =====================================================
-   PREVENT BROWSER FROM RESTORING OLD SCROLL POSITION
+   PREVENT OLD SCROLL POSITION
 ===================================================== */
 
 if("scrollRestoration" in history){
@@ -26,12 +26,15 @@ if("scrollRestoration" in history){
 }
 
 
-
-/* =========================
+/* =====================================================
    OPEN MENU
-========================= */
+===================================================== */
 
 function openMenu(){
+
+    if(!sideMenu || !menuOverlay){
+        return;
+    }
 
     sideMenu.classList.add("active");
 
@@ -44,16 +47,19 @@ function openMenu(){
 }
 
 
-
-/* =========================
+/* =====================================================
    CLOSE MENU
-========================= */
+===================================================== */
 
 function closeMenu(){
 
-    sideMenu.classList.remove("active");
+    if(sideMenu){
+        sideMenu.classList.remove("active");
+    }
 
-    menuOverlay.classList.remove("active");
+    if(menuOverlay){
+        menuOverlay.classList.remove("active");
+    }
 
     document.body.classList.remove("menu-open");
 
@@ -62,8 +68,9 @@ function closeMenu(){
 }
 
 
-
-/* OPEN MENU */
+/* =====================================================
+   MENU EVENTS
+===================================================== */
 
 if(menuBtn){
 
@@ -75,9 +82,6 @@ if(menuBtn){
 }
 
 
-
-/* CLOSE MENU */
-
 if(closeMenuBtn){
 
     closeMenuBtn.addEventListener(
@@ -88,9 +92,6 @@ if(closeMenuBtn){
 }
 
 
-
-/* CLICK OVERLAY */
-
 if(menuOverlay){
 
     menuOverlay.addEventListener(
@@ -100,9 +101,6 @@ if(menuOverlay){
 
 }
 
-
-
-/* MENU LINKS */
 
 document
     .querySelectorAll(".sideMenuLinks a")
@@ -125,44 +123,55 @@ const revealElements =
     document.querySelectorAll(".reveal");
 
 
-const revealObserver =
-    new IntersectionObserver(
+if("IntersectionObserver" in window){
 
-        entries => {
+    const revealObserver =
+        new IntersectionObserver(
 
-            entries.forEach(entry => {
+            entries => {
 
-                if(entry.isIntersecting){
+                entries.forEach(entry => {
 
-                    entry
-                        .target
-                        .classList
-                        .add("show");
+                    if(entry.isIntersecting){
+
+                        entry.target
+                            .classList
+                            .add("show");
+
+                        revealObserver
+                            .unobserve(
+                                entry.target
+                            );
+
+                    }
+
+                });
+
+            },
+
+            {
+                threshold:0.10
+            }
+
+        );
 
 
-                    revealObserver
-                        .unobserve(
-                            entry.target
-                        );
+    revealElements.forEach(element => {
 
-                }
+        revealObserver.observe(element);
 
-            });
+    });
 
-        },
+}
+else{
 
-        {
-            threshold:0.10
-        }
+    revealElements.forEach(element => {
 
-    );
+        element.classList.add("show");
 
+    });
 
-revealElements.forEach(element => {
-
-    revealObserver.observe(element);
-
-});
+}
 
 
 
@@ -407,55 +416,102 @@ const serviceData = {
 
 
 /* =====================================================
-   SERVICE PAGE ELEMENTS
+   MAIN PAGE ELEMENTS
 ===================================================== */
 
 const mainWebsite =
-    document.getElementById(
-        "mainWebsite"
-    );
-
+    document.getElementById("mainWebsite");
 
 const servicePage =
-    document.getElementById(
-        "servicePage"
-    );
+    document.getElementById("servicePage");
 
+const contactPage =
+    document.getElementById("contactPage");
 
 const serviceTitle =
-    document.getElementById(
-        "serviceTitle"
-    );
-
+    document.getElementById("serviceTitle");
 
 const serviceDescription =
-    document.getElementById(
-        "serviceDescription"
-    );
-
+    document.getElementById("serviceDescription");
 
 const mainServiceIcon =
-    document.getElementById(
-        "mainServiceIcon"
-    );
-
+    document.getElementById("mainServiceIcon");
 
 const technologyGrid =
-    document.getElementById(
-        "technologyGrid"
-    );
-
+    document.getElementById("technologyGrid");
 
 const buildGrid =
-    document.getElementById(
-        "buildGrid"
-    );
+    document.getElementById("buildGrid");
 
 
 
 /* =====================================================
-   OPEN SERVICE FULL PAGE
-   ALWAYS OPENS FROM TOP
+   SCROLL TO TOP IMMEDIATELY
+===================================================== */
+
+function instantTop(){
+
+    const oldBehavior =
+        document.documentElement.style.scrollBehavior;
+
+    document.documentElement.style.scrollBehavior =
+        "auto";
+
+    window.scrollTo(0,0);
+
+    document.documentElement.scrollTop = 0;
+
+    document.body.scrollTop = 0;
+
+
+    requestAnimationFrame(() => {
+
+        window.scrollTo(0,0);
+
+        document.documentElement.scrollTop = 0;
+
+        document.body.scrollTop = 0;
+
+
+        requestAnimationFrame(() => {
+
+            document.documentElement.style.scrollBehavior =
+                oldBehavior;
+
+        });
+
+    });
+
+}
+
+
+
+/* =====================================================
+   SHOW MAIN WEBSITE
+===================================================== */
+
+function showMainWebsite(){
+
+    if(servicePage){
+        servicePage.classList.remove("active");
+    }
+
+    if(contactPage){
+        contactPage.classList.remove("active");
+    }
+
+    if(mainWebsite){
+        mainWebsite.style.display = "block";
+    }
+
+    document.body.style.overflow = "";
+
+}
+
+
+
+/* =====================================================
+   OPEN SERVICE PAGE
 ===================================================== */
 
 function openService(type){
@@ -464,79 +520,98 @@ function openService(type){
         serviceData[type];
 
 
-    if(!service){
+    if(
+        !service ||
+        !mainWebsite ||
+        !servicePage
+    ){
         return;
     }
 
 
-    serviceTitle.textContent =
-        service.title;
+    if(serviceTitle){
+
+        serviceTitle.textContent =
+            service.title;
+
+    }
 
 
-    serviceDescription.textContent =
-        service.description;
+    if(serviceDescription){
+
+        serviceDescription.textContent =
+            service.description;
+
+    }
 
 
-    mainServiceIcon.innerHTML = `
-        <i class="${service.icon}"></i>
-    `;
+    if(mainServiceIcon){
+
+        mainServiceIcon.innerHTML = `
+            <i class="${service.icon}"></i>
+        `;
+
+    }
 
 
+    if(technologyGrid){
 
-    technologyGrid.innerHTML =
-        service.technologies
-            .map(item => `
+        technologyGrid.innerHTML =
+            service.technologies
+                .map(item => `
 
-                <div class="techCard">
-
-                    <i class="${item.icon}"></i>
-
-                    <span>
-                        ${item.name}
-                    </span>
-
-                </div>
-
-            `)
-            .join("");
-
-
-
-    buildGrid.innerHTML =
-        service.builds
-            .map(item => `
-
-                <div class="buildCard">
-
-                    <div class="buildIcon">
+                    <div class="techCard">
 
                         <i class="${item.icon}"></i>
 
+                        <span>
+                            ${item.name}
+                        </span>
+
                     </div>
 
-                    <p>
-                        ${item.name}
-                    </p>
+                `)
+                .join("");
 
-                </div>
+    }
 
-            `)
-            .join("");
 
+    if(buildGrid){
+
+        buildGrid.innerHTML =
+            service.builds
+                .map(item => `
+
+                    <div class="buildCard">
+
+                        <div class="buildIcon">
+
+                            <i class="${item.icon}"></i>
+
+                        </div>
+
+                        <p>
+                            ${item.name}
+                        </p>
+
+                    </div>
+
+                `)
+                .join("");
+
+    }
 
 
     closeMenu();
 
 
-    document.documentElement.style.scrollBehavior =
-        "auto";
+    if(contactPage){
 
+        contactPage
+            .classList
+            .remove("active");
 
-    window.scrollTo(0,0);
-
-    document.documentElement.scrollTop = 0;
-
-    document.body.scrollTop = 0;
+    }
 
 
     mainWebsite.style.display =
@@ -554,12 +629,6 @@ function openService(type){
 
     servicePage.scrollTop = 0;
 
-    document.documentElement.scrollTop = 0;
-
-    document.body.scrollTop = 0;
-
-    window.scrollTo(0,0);
-
 
     document.title =
         service.title +
@@ -568,6 +637,7 @@ function openService(type){
 
     history.pushState(
         {
+            page:"service",
             service:type
         },
         "",
@@ -575,25 +645,7 @@ function openService(type){
     );
 
 
-    requestAnimationFrame(() => {
-
-        window.scrollTo(0,0);
-
-        document.documentElement.scrollTop = 0;
-
-        document.body.scrollTop = 0;
-
-        servicePage.scrollTop = 0;
-
-
-        requestAnimationFrame(() => {
-
-            document.documentElement.style.scrollBehavior =
-                "";
-
-        });
-
-    });
+    instantTop();
 
 }
 
@@ -601,21 +653,17 @@ function openService(type){
 
 /* =====================================================
    CLOSE SERVICE PAGE
+   RETURN TO SERVICES
 ===================================================== */
 
 function closeServicePage(){
 
-    servicePage
-        .classList
-        .remove("active");
+    if(!mainWebsite){
+        return;
+    }
 
 
-    mainWebsite.style.display =
-        "block";
-
-
-    document.body.style.overflow =
-        "";
+    showMainWebsite();
 
 
     document.title =
@@ -623,7 +671,9 @@ function closeServicePage(){
 
 
     history.replaceState(
-        {},
+        {
+            page:"home"
+        },
         "",
         "#services"
     );
@@ -659,17 +709,12 @@ function closeServicePage(){
 
 function goServiceHome(){
 
-    servicePage
-        .classList
-        .remove("active");
+    if(!mainWebsite){
+        return;
+    }
 
 
-    mainWebsite.style.display =
-        "block";
-
-
-    document.body.style.overflow =
-        "";
+    showMainWebsite();
 
 
     document.title =
@@ -677,35 +722,119 @@ function goServiceHome(){
 
 
     history.replaceState(
-        {},
+        {
+            page:"home"
+        },
         "",
         "#home"
     );
 
 
-    requestAnimationFrame(() => {
-
-        window.scrollTo({
-            top:0,
-            left:0,
-            behavior:"smooth"
-        });
-
-    });
+    instantTop();
 
 }
 
 
 
 /* =====================================================
-   CONTACT FROM SERVICE PAGE
+   OPEN CONTACT DETAILS PAGE
 ===================================================== */
 
-function goToContact(){
+function openContactPage(){
 
-    servicePage
+    if(
+        !contactPage ||
+        !mainWebsite
+    ){
+
+        console.error(
+            "contactPage or mainWebsite was not found."
+        );
+
+        return;
+    }
+
+
+    closeMenu();
+
+
+    /* HIDE SERVICE PAGE */
+
+    if(servicePage){
+
+        servicePage
+            .classList
+            .remove("active");
+
+    }
+
+
+    /* HIDE MAIN WEBSITE */
+
+    mainWebsite.style.display =
+        "none";
+
+
+    /* SHOW CONTACT PAGE */
+
+    contactPage
+        .classList
+        .add("active");
+
+
+    document.body.style.overflow =
+        "";
+
+
+    contactPage.scrollTop =
+        0;
+
+
+    document.title =
+        "Contact | Cezonal Solutions";
+
+
+    history.pushState(
+        {
+            page:"contact"
+        },
+        "",
+        "#contact-details"
+    );
+
+
+    instantTop();
+
+}
+
+
+
+/* =====================================================
+   CLOSE CONTACT PAGE -> HOME
+===================================================== */
+
+function closeContactPage(){
+
+    if(
+        !contactPage ||
+        !mainWebsite
+    ){
+        return;
+    }
+
+
+    contactPage
         .classList
         .remove("active");
+
+
+    if(servicePage){
+
+        servicePage
+            .classList
+            .remove("active");
+
+    }
 
 
     mainWebsite.style.display =
@@ -721,31 +850,31 @@ function goToContact(){
 
 
     history.replaceState(
-        {},
+        {
+            page:"home"
+        },
         "",
-        "#contact"
+        "#home"
     );
 
 
-    requestAnimationFrame(() => {
+    instantTop();
 
-        const contactSection =
-            document.getElementById(
-                "contact"
-            );
+}
 
 
-        if(contactSection){
 
-            contactSection
-                .scrollIntoView({
-                    behavior:"smooth",
-                    block:"start"
-                });
+/* =====================================================
+   SERVICE PAGE -> CONTACT DETAILS PAGE
 
-        }
+   IMPORTANT:
+   Now "Contact Us" on service page opens the
+   Contact Details page directly.
+===================================================== */
 
-    });
+function goToContact(){
+
+    openContactPage();
 
 }
 
@@ -759,106 +888,11 @@ window.addEventListener(
     "popstate",
     () => {
 
-        if(
-            servicePage &&
-            servicePage
-                .classList
-                .contains("active")
-        ){
-
-            servicePage
-                .classList
-                .remove("active");
-
-
-            mainWebsite.style.display =
-                "block";
-
-
-            document.body.style.overflow =
-                "";
-
-
-            document.title =
-                "Cezonal Solutions Private Limited";
-
-
-            requestAnimationFrame(() => {
-
-                const servicesSection =
-                    document.getElementById(
-                        "services"
-                    );
-
-
-                if(servicesSection){
-
-                    servicesSection
-                        .scrollIntoView({
-                            behavior:"smooth"
-                        });
-
-                }
-
-            });
-
-        }
-
-    }
-);
-
-
-
-/* =====================================================
-   ESC KEY
-===================================================== */
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if(event.key === "Escape"){
-
-            if(
-                servicePage &&
-                servicePage
-                    .classList
-                    .contains("active")
-            ){
-
-                closeServicePage();
-
-            }
-
-            else if(
-                sideMenu &&
-                sideMenu
-                    .classList
-                    .contains("active")
-            ){
-
-                closeMenu();
-
-            }
-
-        }
-
-    }
-);
-
-
-
-/* =====================================================
-   HANDLE SERVICE URL ON PAGE LOAD
-===================================================== */
-
-window.addEventListener(
-    "load",
-    () => {
-
         const hash =
             window.location.hash;
 
+
+        /* SERVICE URL */
 
         if(hash.startsWith("#service-")){
 
@@ -871,9 +905,379 @@ window.addEventListener(
 
             if(serviceData[type]){
 
-                openService(type);
+                openServiceFromHistory(type);
+
+                return;
 
             }
+
+        }
+
+
+        /* CONTACT URL */
+
+        if(hash === "#contact-details"){
+
+            openContactFromHistory();
+
+            return;
+
+        }
+
+
+        /* NORMAL WEBSITE */
+
+        showMainWebsite();
+
+
+        document.title =
+            "Cezonal Solutions Private Limited";
+
+
+        if(
+            hash &&
+            hash !== "#home"
+        ){
+
+            requestAnimationFrame(() => {
+
+                const section =
+                    document.querySelector(hash);
+
+
+                if(section){
+
+                    section.scrollIntoView({
+                        behavior:"smooth",
+                        block:"start"
+                    });
+
+                }
+                else{
+
+                    instantTop();
+
+                }
+
+            });
+
+        }
+        else{
+
+            instantTop();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   OPEN SERVICE FROM BROWSER HISTORY
+
+   Does NOT create another history entry.
+===================================================== */
+
+function openServiceFromHistory(type){
+
+    const service =
+        serviceData[type];
+
+
+    if(
+        !service ||
+        !mainWebsite ||
+        !servicePage
+    ){
+        return;
+    }
+
+
+    if(serviceTitle){
+
+        serviceTitle.textContent =
+            service.title;
+
+    }
+
+
+    if(serviceDescription){
+
+        serviceDescription.textContent =
+            service.description;
+
+    }
+
+
+    if(mainServiceIcon){
+
+        mainServiceIcon.innerHTML = `
+            <i class="${service.icon}"></i>
+        `;
+
+    }
+
+
+    if(technologyGrid){
+
+        technologyGrid.innerHTML =
+            service.technologies
+                .map(item => `
+
+                    <div class="techCard">
+
+                        <i class="${item.icon}"></i>
+
+                        <span>
+                            ${item.name}
+                        </span>
+
+                    </div>
+
+                `)
+                .join("");
+
+    }
+
+
+    if(buildGrid){
+
+        buildGrid.innerHTML =
+            service.builds
+                .map(item => `
+
+                    <div class="buildCard">
+
+                        <div class="buildIcon">
+
+                            <i class="${item.icon}"></i>
+
+                        </div>
+
+                        <p>
+                            ${item.name}
+                        </p>
+
+                    </div>
+
+                `)
+                .join("");
+
+    }
+
+
+    if(contactPage){
+
+        contactPage
+            .classList
+            .remove("active");
+
+    }
+
+
+    mainWebsite.style.display =
+        "none";
+
+
+    servicePage
+        .classList
+        .add("active");
+
+
+    document.body.style.overflow =
+        "";
+
+
+    document.title =
+        service.title +
+        " | Cezonal Solutions";
+
+
+    instantTop();
+
+}
+
+
+
+/* =====================================================
+   OPEN CONTACT FROM BROWSER HISTORY
+===================================================== */
+
+function openContactFromHistory(){
+
+    if(
+        !contactPage ||
+        !mainWebsite
+    ){
+        return;
+    }
+
+
+    if(servicePage){
+
+        servicePage
+            .classList
+            .remove("active");
+
+    }
+
+
+    mainWebsite.style.display =
+        "none";
+
+
+    contactPage
+        .classList
+        .add("active");
+
+
+    document.body.style.overflow =
+        "";
+
+
+    document.title =
+        "Contact | Cezonal Solutions";
+
+
+    instantTop();
+
+}
+
+
+
+/* =====================================================
+   ESC KEY
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key !== "Escape"){
+            return;
+        }
+
+
+        /* CONTACT PAGE */
+
+        if(
+            contactPage &&
+            contactPage
+                .classList
+                .contains("active")
+        ){
+
+            closeContactPage();
+
+            return;
+
+        }
+
+
+        /* SERVICE PAGE */
+
+        if(
+            servicePage &&
+            servicePage
+                .classList
+                .contains("active")
+        ){
+
+            closeServicePage();
+
+            return;
+
+        }
+
+
+        /* SIDE MENU */
+
+        if(
+            sideMenu &&
+            sideMenu
+                .classList
+                .contains("active")
+        ){
+
+            closeMenu();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   HANDLE URL WHEN PAGE LOADS
+===================================================== */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        const hash =
+            window.location.hash;
+
+
+        /* CONTACT PAGE */
+
+        if(hash === "#contact-details"){
+
+            openContactFromHistory();
+
+            return;
+
+        }
+
+
+        /* SERVICE PAGE */
+
+        if(hash.startsWith("#service-")){
+
+            const type =
+                hash.replace(
+                    "#service-",
+                    ""
+                );
+
+
+            if(serviceData[type]){
+
+                openServiceFromHistory(type);
+
+                return;
+
+            }
+
+        }
+
+
+        /* NORMAL PAGE */
+
+        if(mainWebsite){
+
+            mainWebsite.style.display =
+                "block";
+
+        }
+
+
+        if(servicePage){
+
+            servicePage
+                .classList
+                .remove("active");
+
+        }
+
+
+        if(contactPage){
+
+            contactPage
+                .classList
+                .remove("active");
 
         }
 
@@ -920,15 +1324,20 @@ const coverflowNext =
     );
 
 
-let coverflowActive = 0;
+let coverflowActive =
+    0;
 
-let coverflowTimer = null;
+let coverflowTimer =
+    null;
 
-let coverflowStartX = 0;
+let coverflowStartX =
+    0;
 
-let coverflowMoveX = 0;
+let coverflowMoveX =
+    0;
 
-let coverflowPointerDown = false;
+let coverflowPointerDown =
+    false;
 
 
 
@@ -1369,7 +1778,7 @@ if(coverflow){
 
 
 /* =====================================================
-   PAUSE WHEN TAB IS HIDDEN
+   PAUSE CAROUSEL WHEN TAB HIDDEN
 ===================================================== */
 
 document.addEventListener(
@@ -1404,123 +1813,5 @@ if(
     renderCoverflow();
 
     startCoverflowAuto();
-
-}
-
-/* =====================================================
-   CONTACT DETAILS PAGE
-===================================================== */
-
-const contactPage =
-    document.getElementById("contactPage");
-
-
-function openContactPage(){
-
-    // close side menu if open
-    closeMenu();
-
-
-    // hide main website
-    mainWebsite.style.display = "none";
-
-
-    // hide service page
-    if(servicePage){
-        servicePage.classList.remove("active");
-    }
-
-
-    // show contact page
-    contactPage.classList.add("active");
-
-
-    // unlock scrolling
-    document.body.style.overflow = "";
-
-
-    // page title
-    document.title =
-        "Contact | Cezonal Solutions";
-
-
-    // URL
-    history.pushState(
-        {
-            page:"contact"
-        },
-        "",
-        "#contact-details"
-    );
-
-
-    // ALWAYS OPEN FROM TOP
-    document.documentElement.style.scrollBehavior =
-        "auto";
-
-    window.scrollTo(0,0);
-
-    document.documentElement.scrollTop = 0;
-
-    document.body.scrollTop = 0;
-
-    contactPage.scrollTop = 0;
-
-
-    requestAnimationFrame(() => {
-
-        window.scrollTo(0,0);
-
-        document.documentElement.scrollTop = 0;
-
-        document.body.scrollTop = 0;
-
-
-        requestAnimationFrame(() => {
-
-            document.documentElement.style.scrollBehavior =
-                "";
-
-        });
-
-    });
-
-}
-
-
-
-function closeContactPage(){
-
-    contactPage.classList.remove("active");
-
-
-    mainWebsite.style.display =
-        "block";
-
-
-    document.body.style.overflow =
-        "";
-
-
-    document.title =
-        "Cezonal Solutions Private Limited";
-
-
-    history.replaceState(
-        {},
-        "",
-        "#home"
-    );
-
-
-    requestAnimationFrame(() => {
-
-        window.scrollTo({
-            top:0,
-            left:0,
-            behavior:"smooth"
-        });
-
-    });
 
 }
