@@ -3883,3 +3883,55 @@ body.menu-open .roadmapPoint::before{
     }
 
 }
+/* CLICKABLE EMAIL */
+
+.emailAnchor{
+    color:#111;
+
+    text-decoration:none;
+
+    cursor:pointer;
+
+    display:inline-block;
+
+    transition:
+        color .2s ease;
+}
+
+
+.emailAnchor:hover{
+    color:#47A8FF;
+
+    text-decoration:underline;
+}
+
+
+/* EMAIL ARROW */
+
+.emailArrow{
+    margin-left:auto;
+
+    color:#111;
+
+    text-decoration:none;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+}
+
+
+.emailArrow i{
+    font-size:12px;
+
+    transition:
+        transform .25s ease;
+}
+
+
+.emailArrow:hover i{
+    transform:translateX(4px);
+}
